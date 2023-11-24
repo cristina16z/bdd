@@ -1,4 +1,5 @@
-/*
+/* https://pastebin.com/wixjBQAV
+
 Para entrar: mysql -u root -p
 show databases;							Muestrame todas las bases de datos
 create data base nom;					Crea una sóla tabla de base de datos
@@ -32,12 +33,12 @@ create table t1(
 
 	dni char (9),
 	nom_complet varchar(25),		
-	edat tinyint unsigned,			Para que la edad no sea negativo
-	sexe char(1)					Si sólo se quiere guardar M o F, también se puede varchar(20)
-	sou float unsigned,				No puede haber sueldos negativos
+	edat tinyint unsigned,			/*	Para que la edad no sea negativo										*/
+	sexe char(1)					/*	Si sólo se quiere guardar M o F, también se puede varchar(20) 			*/
+	sou float unsigned,				"	No puede haber sueldos negativos 										"
 	email varchar(50),
-	telefon int,					Si quiers guardarlo cómo texto char(12)
-	es_estudiant boolean			En el último atributo no hace falta ,
+	telefon int,					/*	Si quiers guardarlo cómo texto char(12)									*/
+	es_estudiant boolean			/*	En el último atributo no hace falta										*/
 
 );
 
@@ -45,5 +46,5 @@ create table t2(
 
 	num_habitacio smallint,
 	tipus enum('doble','triple','suite')
-	
+
 );
