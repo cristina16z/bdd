@@ -127,7 +127,7 @@ create table t4(
 delete from persona;
 select * from persona;									seleccionar todo de persona							*/
 
-ejemplo clase:
+Ejemplo en clase:
 
 create table persona(
 
