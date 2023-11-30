@@ -1,3 +1,50 @@
-create table equipo(
+/* *****************************************************
+//  Institut TIC de Barcelona
+//	CFGS Desenvolupament d'aplicacions xxxxx
+//	M20: Bases de dades. UF2: Llenguatge SQL
+//	PRÀCTICA UF2. FASE 1
+//	AUTOR: Cristina Val
+//	DATA: 30/11/2023
+****************************************************** */
 
+/* comentari */
+
+drop table if exists equipo;
+drop table if exists jugador;
+drop table if exists estadisticas;
+drop table if exists partido;
+
+create table equipo (
+	nombre varchar (20) not NULL,
+	ciudad varchar (20) not NULL,
+	conferencia char (4) not NULL, 
+	division varchar (9) not NULL
+);
+
+create table jugador(
+	codi smallint not NULL,
+	nombre varchar (30) not NULL,
+	procedencia varchar (20) NULL,
+	altura char (4) NULL,
+	peso smallint NULL,
+	posicion varchar (5),
+	nombre_equipo varchar (20)
+);
+
+create table estadisticas (
+	codi smallint not NULL,
+	temporada char (5) not NULL,
+	puntos_por_partido float DEFAULT 0,
+	asistencias_por_partido float DEFAULT 0,
+	tapones_por_partido float DEFAULT 0,
+	rebotes_por_partido float DEFAULT 0
+);
+
+create table partido (
+	codi smallint not NULL,
+	equipo_local varchar (20) not NULL,
+	equipo_visitante varchar (20) not NULL,
+	puntos_local tinyint NULL,
+	puntos_visitante tinyint NULL,
+	temporada char (5) not NULL
 );
