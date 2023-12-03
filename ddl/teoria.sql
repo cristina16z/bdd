@@ -188,3 +188,36 @@ create table persona (
 	constraint uq_dni unique (dni)
 
 );
+
+/*pk, n.n, uq, ch
+foreign key
+
+Persona (dni(primary key), nom)
+Coche (matricula (primary key),marca, modelo, dni)*/
+
+create table persona (
+    dni char(9),
+    nom varchar(20),
+    constraint pk_persona primary key (dni)
+);
+ 
+insert into persona values ('1111A','Pere');
+insert into persona values ('2222B','Oriol');
+ 
+create table coche (
+    matricula char(9),
+    marca varchar(20) not null,
+    modelo varchar(20),
+    dni char(9),
+    constraint pk_coche primary key(matricula),
+    constraint fk_coche_persona foreign key (dni)
+            REFERENCES Persona(dni)
+);
+
+insert into coche values('B2222','Mercedes','clase J','1111A');
+insert into coche values('B2222','Mercedes','clase J', not NULL); 		si es | mínimo y no conocemos el dato DNI persona
+insert into coche values('B2222','Mercedes','clase J', NULL); 			si es  O OPCIONAL y no conocemos el dato DNI persona
+
+/*
+para crear: primero el padre y luego los hijos
+primero eliminar: primero los hijos y luego el padre*/

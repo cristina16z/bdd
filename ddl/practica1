@@ -9,10 +9,10 @@
 
 /* comentari */
 
-drop table if exists equipo;
-drop table if exists jugador;
-drop table if exists estadisticas;
 drop table if exists partido;
+drop table if exists estadisticas;
+drop table if exists jugador;
+drop table if exists equipo;
 
 create table equipo (
 	nombre varchar (20) not NULL,
@@ -22,7 +22,7 @@ create table equipo (
 );
 
 create table jugador(
-	codi smallint not NULL,
+	codigo smallint not NULL,
 	nombre varchar (30) not NULL,
 	procedencia varchar (20) NULL,
 	altura char (4) NULL,
@@ -32,7 +32,7 @@ create table jugador(
 );
 
 create table estadisticas (
-	codi smallint not NULL,
+	codigo smallint not NULL,
 	temporada char (5) not NULL,
 	puntos_por_partido float DEFAULT 0,
 	asistencias_por_partido float DEFAULT 0,
@@ -41,10 +41,11 @@ create table estadisticas (
 );
 
 create table partido (
-	codi smallint not NULL,
+	codigo smallint not NULL,
 	equipo_local varchar (20) not NULL,
 	equipo_visitante varchar (20) not NULL,
 	puntos_local tinyint NULL,
 	puntos_visitante tinyint NULL,
 	temporada char (5) not NULL
 );
+
