@@ -1,0 +1,125 @@
+/* *****************************************************
+//  Institut TIC de Barcelona
+//	CFGS Desenvolupament d'aplicacions xxxxx
+//	M20: Bases de dades. UF2: Llenguatge SQL
+//	PRÀCTICA UF2. FASE 2
+//	AUTOR: Cristina Val
+//	DATA: 13/12/2023
+****************************************************** */
+
+/* comentari */
+
+drop table if exists partido;
+drop table if exists estadisticas;
+drop table if exists jugador;
+drop table if exists equipo;
+
+
+create table equipo (
+	nombre varchar (20) not NULL,
+	ciudad varchar (20) not NULL,
+	conferencia char (4) not NULL, 
+	division varchar (9) not NULL,
+	constraint pk_equipo primary key (nombre),
+	constraint ch_conferencia check (conferencia ='East' or conferencia ='West'),
+	constraint ch_division check (division = 'Atlantic' or division = 'Central' or division = 'SouthEast' or division = 'NorthWest' or division = 'Pacific' or division = 'SouthWest')
+);
+
+create table jugador(
+	codigo smallint auto_increment not NULL,
+	nombre varchar (30) not NULL,
+	procedencia varchar (20) NULL,
+	altura char (4) NULL,
+	peso smallint NULL,
+	posicion varchar (5),
+	nombre_equipo varchar (20),
+	constraint pk_jugador primary key (codigo),
+	constraint ch_peso check (peso >= 130 and peso <= 400),
+	constraint ch_posicion check (posicion = 'G' or posicion = 'F' or posicion = 'C' or posicion = 'G-F' or posicion = 'F-C' or posicion = 'G-C' or posicion='G-F-C'),
+	/*foreign key sin primary key*/
+	constraint fk_jugador_nombre_equipo foreign key (nombre_equipo) references equipo(nombre)
+);
+
+create table estadisticas (
+	codigo smallint not NULL,
+	temporada char (5) not NULL,
+	puntos_por_partido float DEFAULT 0,
+	asistencias_por_partido float DEFAULT 0,
+	tapones_por_partido float DEFAULT 0,
+	rebotes_por_partido float DEFAULT 0,
+	constraint pk_estadisticas primary key (codigo, temporada),
+	constraint fk_estadisticas_jugador foreign key (codigo) references jugador (codigo),
+	constraint ch_puntos_partido check (puntos_por_partido >= 0),
+	constraint ch_asistencias_partido check (asistencias_por_partido >= 0),
+	constraint ch_tapones_partido check (tapones_por_partido >= 0),
+	constraint ch_rebotes_partido check (rebotes_por_partido >= 0)
+);
+
+create table partido (
+	codigo smallint auto_increment not NULL,
+	equipo_local varchar (20) not NULL,
+	equipo_visitante varchar (20) not NULL,
+	puntos_local tinyint NULL,
+	puntos_visitante tinyint NULL,
+	temporada char (5) not NULL,
+	constraint pk_partido primary key (codigo),
+	constraint fk_equipo_local foreign key (equipo_local) references equipo (nombre),
+	constraint fk_equipo_visitante foreign key (equipo_visitante) references equipo (nombre)
+	/*restricción de que no haya puntos local/visitante negativos? */
+);
+
+
+
+
+
+
+
+
+
+
+/*prueba*/
+
+
+create table jugador(
+	codigo smallint not NULL,
+	nombre varchar (30) not NULL,
+	procedencia varchar (20) NULL,
+	altura char (4) NULL,
+	peso smallint NULL,
+	posicion varchar (5),
+	nombre_equipo varchar (20),
+	constraint pk_jugador primary key (codigo),
+    CONSTRAINT ck_peso_valido CHECK (Peso BETWEEN 130 AND 400),
+    CONSTRAINT ck_posicion_valida CHECK (Posicion IN ('G', 'F', 'C')),
+       CONSTRAINT ck_altura_valida CHECK (
+        Altura IS NULL OR 
+        Altura LIKE '__-___'
+    )
+);
+
+CREATE TABLE Estadisticas (
+    Codigo SMALLINT NOT NULL,
+    Temporada CHAR(5) NOT NULL,
+    Puntos_Por_Partido FLOAT DEFAULT 0,
+    Asistencias_Por_Partido FLOAT DEFAULT 0,
+    Tapones_Por_Partido FLOAT DEFAULT 0,
+    Rebotes_Por_Partido FLOAT DEFAULT 0,
+    CONSTRAINT pk_estadisticas PRIMARY KEY (Temporada, Codigo),
+    CONSTRAINT fk_estadisticas_jugador FOREIGN KEY (Codigo) REFERENCES Jugador (Codigo),
+    CONSTRAINT ck_puntos_validos CHECK (Puntos_Por_Partido >= 0),
+    CONSTRAINT ck_asistencias_validas CHECK (Asistencias_Por_Partido >= 0),
+    CONSTRAINT ck_tapones_validos CHECK (Tapones_Por_Partido >= 0),
+    CONSTRAINT ck_rebotes_validos CHECK (Rebotes_Por_Partido >= 0)
+);
+
+CREATE TABLE Partido (
+    Codigo SMALLINT NOT NULL,
+    Equipo_Local VARCHAR(20) NOT NULL,
+    Equipo_Visitante VARCHAR(20) NOT NULL,
+    Puntos_Local TINYINT NULL,
+    Puntos_Visitante TINYINT NULL,
+    Temporada CHAR(5) NOT NULL,
+    CONSTRAINT pk_partido PRIMARY KEY (Codigo),
+    CONSTRAINT ck_puntos_local_validos CHECK (Puntos_Local IS NULL OR Puntos_Local >= 0),
+    CONSTRAINT ck_puntos_visitante_validos CHECK (Puntos_Visitante IS NULL OR Puntos_Visitante >= 0)
+);

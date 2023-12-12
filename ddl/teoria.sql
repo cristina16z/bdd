@@ -221,3 +221,30 @@ insert into coche values('B2222','Mercedes','clase J', NULL); 			si es  O OPCION
 /*
 para crear: primero el padre y luego los hijos
 primero eliminar: primero los hijos y luego el padre*/
+
+
+/*Harry Potter */
+
+create table profe (
+  id integer primary key auto_increment,
+  nom varchar(50),
+  casa_id integer,
+  constraint fk_profe_casa foreign key (casa_id) references casa(id) on DELETE CASCADE
+)engine=innodb;
+
+
+create table classes (
+  id integer primary key auto_increment,
+  materia varchar(50),
+  profe_id integer,
+  constraint fk_classe_profe foreign key (profe_id) references profe(id) on DELETE CASCADE
+)engine=innodb;
+
+
+create table estudiant (
+  id integer primary key auto_increment,
+  nom varchar(50) not null,
+  anyo integer not null,
+  casa_id integer,
+  constraint fk_estudiant_casa foreign key (casa_id) references casa(id) on DELETE CASCADE
+)engine=innodb;
