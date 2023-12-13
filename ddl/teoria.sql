@@ -54,7 +54,8 @@ preu float
 );
 
 contrain es cómo "norma"
-
+drop para la estrucutra
+delete para los datos
 
 Exercicis powerpoint:
 
@@ -223,6 +224,8 @@ para crear: primero el padre y luego los hijos
 primero eliminar: primero los hijos y luego el padre*/
 
 
+
+
 /*Harry Potter */
 
 create table profe (
@@ -248,3 +251,168 @@ create table estudiant (
   casa_id integer,
   constraint fk_estudiant_casa foreign key (casa_id) references casa(id) on DELETE CASCADE
 )engine=innodb;
+
+
+/*Hechizos*/
+
+select * from casa;
+select * from estudiant;
+delete from casa where id=1;	
+/*no se puede borrar porque hay una foreign key, hay dependencias de la casa*/	
+
+update casa set id=23 where id=2;
+/*actualiza la tabla casa, cambia la id, pero sigue sin funcionar porque hay dependencia	*/
+
+insert into estudiant (nom, anyo, casa_id) values ('Cristina', 1, 2);
+/*para introducir los valores*/
+
+
+
+on DELETE CASCADE 
+delete from casa where id=1;
+/*Se borra la casa y desaparecen los alumnos que pertenecían a esa casa.
+Es decir, borra la casa y sus dependientes (padres). (cómo el ejemplo)*/
+
+
+on delete cascade on update cascade
+update casa set id=23 where id=2;
+/*Cambia el id de la casa, y los estudiantes que pertenecían al 2, cambian al 23.
+Cambiando la clave primaria, arrastro y actualizo sus dependientes. Arrastra los cambios.*/
+
+
+on delete set null 
+delete from casa where id=2;
+/*Elimina la casa, pero los alumnos no, simplemente los alumnos que pertenecían a la 2, ahora pone NULL */
+
+
+on delete restrict
+/* por defecto 
+
+
+
+Ahora cada vez que pongamos una clave foránea hay que poner on delete..
+ejemplo*/
+
+ profe > UF > modulo > ciclo
+
+Profe: on delete restrict
+UF: on delete cascade
+modulo: on delete cascade
+ciclo: on delete restrict
+/*en éste ejemplo al borrar modulos no se podría borrar uf ya que lo restringe profe
+
+no puedo poner set null si hay un mínimo | en el esquema
+Lo podría poner si fuera O 															*/
+
+
+Cambiarle el nombre: rename table [name] to [newName];
+
+
+
+
+--------------------------------------------------Modificar tablas-------------------------------------------------------
+
+
+MODIFICAR COLUMNAS:
+
+/*Añadir una nueva columna (filas)*/
+alter table [nameTable]
+add column telefon varchar(12) default 'desconegut' not null,
+add column numSegSocial varchar(20) first,								/*al principio de todo */
+add column DNI char(9) after nom,										/*después del nombre*/
+add column email varchar(20);											/*por defecto se añadirá a la última*/
+
+/*borrar columna*/
+drop column telefon;													
+
+
+/*[PowerPoint] Modifica la taula t2 i afegeix una columna anomenada metres
+afegeix una columna anomenada te_nevera però ha d’estar situada just després de la columna tipus */
+
+create table t2(
+	num_habitacio smallint,
+	tipus enum('doble','triple','suite')
+);
+
+alter table t2
+add column metres smallint,
+add column te_nevera boolean after tipus;
+
+/*Modifica la taula t2 i elimina la columna anomenada te_nevera */
+alter table t2
+drop column te_nevera;
+
+
+
+
+
+MODIFICAR RESTRICCIONES: 
+
+/*Modificar definició: por ejemplo cambiar el email por ejemplo varchar(20) a varchar(30)*/
+alter table prova1
+modify email varchar(30) not null;
+
+/*Modificar el nombre i definición: cambiar email por correo + su varchar*/
+alter table prova1
+change column email correo varchar(25) null;
+
+/*modificar nombre: [antiguoName] to [newName] */
+alter table prova1
+rename column email to correo;
+
+
+/*[PowerPoint] Modifica la taula t1 de forma que l’atribut nom complet sigui varchar de 300 caràcters*/
+/*Modifica la taula t1 de forma que l’atribut edat passi a anomenar-se data_naixement i sigui de tipus data*/
+
+create table t1(
+
+	dni char (9) primary key,							
+	nom_complet varchar(25) default 'Desconegut',		
+	edat tinyint unsigned,								
+	sexe char(1)										
+	sou float unsigned,									
+	email varchar(50),
+	telefon int,										
+	es_estudiant boolean							
+);
+
+alter table t1
+modify nom_complet varchar (300),									/*no hace falta poner column*/
+change column edat data_naixament date;
+
+
+
+
+
+AÑADIR RESTRICCIONES: 
+
+alter table prova1
+add contraint pk_prova1 primary key (codi,nom),
+add constraint uq_correo unique (correo),
+drop constraint uq_correo;
+
+/*cuando añadimos un constraint , no quiere que pongamos nombre (pk_prova1) a una primary key
+si hacemos drop constraint pk_prova1 va a dar error, porque lo ha ignorado.
+Entonces para borrar el constraint de una clave primaria es:										*/
+
+alter table prova1
+drop primary key;
+
+
+
+/*[PowerPoint] Modifica la taula t1 afegeix una restricció de clau primària.
+Modifica la taula t1 per tal que es validi que l’atribut sou nomès pot acceptar valors positius.
+Modifica la taula t1 i elimina les dos restriccions anteriors										*/
+
+alter table t1
+add constraint pk_dni primary key (dni),
+add constraint ch_sou check (sou>=0);
+/*modify column sou float unsigned;			segunda opción, se podría poner unsigned*/
+
+alter table t1
+drop primary key,
+drop constraint ch_sou;
+
+
+
+/* https://pastebin.com/QxetTbG7*/
