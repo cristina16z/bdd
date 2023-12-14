@@ -1,4 +1,109 @@
 /* *****************************************************
+//  INS TIC de Barcelona
+//	CFGS DAM-DAW
+//	M2: Bases de dades. UF2: Llenguatge SQL
+//	PRÀCTICA UF2. FASE 2
+//	AUTOR: CRISTINA VAL
+//	DATA: 14/12/2023
+****************************************************** */
+
+/*                ATENCIÓ:                   */
+/*  NO MODIFIQUEU RES ENTRE AQUESTA LINEA I LA 60 */
+
+/* BORRAT DE TAULES */
+/* QUAN ESTIGUIN CREADES LES CLAUS FORANES CALDRÀ TENIR PRESENT L'ORDRE: */
+/* PARTIDO PREVIA A EQUIP. ESTADISTICAS PREVIA A JUGADOR. JUGADOR PREVIA A EQUIP */
+DROP TABLE IF EXISTS partido;
+DROP TABLE IF EXISTS estadisticas;
+DROP TABLE IF EXISTS jugador;
+DROP TABLE IF EXISTS equipo;
+
+/* CREACIO DE LA TAULA EQUIP */
+CREATE TABLE equipo (
+  nombre varchar(20),
+  ciudad varchar(20) NOT NULL,
+  conferencia char(4) NOT NULL,
+  division varchar(9) NOT NULL
+);
+
+
+/* CREACIO DE LA TAULA JUGADOR */
+CREATE TABLE jugador (
+  codigo mediumint,
+  nombre varchar(30) NOT NULL,
+  procedencia varchar(20),
+  altura char(4),
+  peso smallint,
+  posicion varchar(5),
+  nombre_equipo varchar(20) NOT NULL
+);
+
+/* CREACIO DE LA TAULA ESTADISTICAS */
+CREATE TABLE estadisticas (
+  codigo mediumint,
+  temporada char(5),
+  puntos_por_partido float,
+  asistencias_por_partido float,
+  tapones_por_partido float,
+  rebotes_por_partido float
+);
+
+/* CREACIO DE LA TAULA PARTIDO */
+CREATE TABLE partido (
+  codigo mediumint,
+  equipo_local varchar(20) NOT NULL,
+  equipo_visitante varchar(20) NOT NULL,
+  puntos_local smallint,
+  puntos_visitante smallint,
+  temporada char(5) NOT NULL
+);
+/* AFEGEIX A PARTIR D'AQUESTA LÍNIA LA SOLUCIÓ PLANTEJADA A LA FASE 2 */
+
+alter table equipo
+	add constraint pk_equipo primary key (nombre),
+	add constraint ch_conferencia check (conferencia ='East' or conferencia ='West'),
+	add constraint ch_division check (division = 'Atlantic' or division = 'Central' or division = 'SouthEast' or division = 'NorthWest' or division = 'Pacific' or division = 'SouthWest');
+
+alter table JUGADOR
+	add constraint pk_jugador primary key (codigo),
+	add constraint ch_peso check (peso >= 130 and peso <= 400),
+	add constraint ch_posicion check (posicion = 'G' or posicion = 'F' or posicion = 'C' or
+									posicion = 'G-F' or posicion = 'F-C' or posicion = 'G-C' or
+									posicion = 'F-G' or posicion = 'C-F' or posicion = 'C-G' or
+									posicion='G-F-C' or posicion='F-G-C' or posicion='G-C-F' or
+									posicion='F-C-G' or posicion='C-F-G' or posicion='C-G-F'),
+	add constraint fk_jugador_nombre_equipo foreign key (nombre_equipo) references equipo(nombre);
+
+alter table ESTADISTICAS
+	add constraint fk_estadisticas_jugador foreign key (codigo) references jugador (codigo) on delete CASCADE,
+	add constraint pk_estadisticas primary key (codigo, temporada),
+	add constraint ch_puntos_partido check (puntos_por_partido >= 0),
+	add constraint ch_asistencias_partido check (asistencias_por_partido >= 0),
+	add constraint ch_tapones_partido check (tapones_por_partido >= 0),
+	add constraint ch_rebotes_partido check (rebotes_por_partido >= 0);
+	
+alter table PARTIDO
+	add constraint pk_partido primary key (codigo),
+	add constraint fk_equipo_local foreign key (equipo_local) references equipo (nombre),
+	add constraint fk_equipo_visitante foreign key (equipo_visitante) references equipo (nombre);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* *****************************************************
 //  Institut TIC de Barcelona
 //	CFGS Desenvolupament d'aplicacions xxxxx
 //	M20: Bases de dades. UF2: Llenguatge SQL
@@ -36,7 +141,6 @@ create table jugador(
 	constraint pk_jugador primary key (codigo),
 	constraint ch_peso check (peso >= 130 and peso <= 400),
 	constraint ch_posicion check (posicion = 'G' or posicion = 'F' or posicion = 'C' or posicion = 'G-F' or posicion = 'F-C' or posicion = 'G-C' or posicion='G-F-C'),
-	/*foreign key sin primary key*/
 	constraint fk_jugador_nombre_equipo foreign key (nombre_equipo) references equipo(nombre)
 );
 
@@ -47,8 +151,8 @@ create table estadisticas (
 	asistencias_por_partido float DEFAULT 0,
 	tapones_por_partido float DEFAULT 0,
 	rebotes_por_partido float DEFAULT 0,
+	constraint fk_estadisticas_jugador foreign key (codigo) references jugador (codigo) on delete CASCADE,
 	constraint pk_estadisticas primary key (codigo, temporada),
-	constraint fk_estadisticas_jugador foreign key (codigo) references jugador (codigo),
 	constraint ch_puntos_partido check (puntos_por_partido >= 0),
 	constraint ch_asistencias_partido check (asistencias_por_partido >= 0),
 	constraint ch_tapones_partido check (tapones_por_partido >= 0),
@@ -65,8 +169,7 @@ create table partido (
 	constraint pk_partido primary key (codigo),
 	constraint fk_equipo_local foreign key (equipo_local) references equipo (nombre),
 	constraint fk_equipo_visitante foreign key (equipo_visitante) references equipo (nombre)
-	/*restricción de que no haya puntos local/visitante negativos? */
-);
+	
 
 
 
