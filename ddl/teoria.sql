@@ -53,7 +53,7 @@ edat tinyint unsigned,							unsigned para que no haya negativos
 preu float
 );
 
-contrain es cómo "norma"
+contrain es una norma, restricción
 drop para la estrucutra
 delete para los datos
 
@@ -106,7 +106,7 @@ create table t3(
 	dni char (9) PRIMARY key,								"con la Primary key ya se aplica automáticamente el not NULL"
 	nom varchar(20) not NULL,					
 	email year (4) not NULL UNIQUE,					
-	sou float(400) not NULL check (sou >= 400)	
+	sou float not NULL check (sou >= 400)	
 	
 );
 

@@ -88,5 +88,51 @@ alter table pelicula add column puntuacion float;		/*opción 1*/
 
 
 /*Exercici 14: Afegeix un camp a la taula pelicula:
-	a. Votos □ Numèric																									*/
+	a. Votos □ Numèric																								*/
 alter table pelicula add column votos Mediumint;
+
+
+
+
+
+
+
+
+
+/*------------------------------------------------Exercici de pràctica a clase---------------------------------------*/
+
+create table alumne(
+	dni char(9) not null,
+	numSS char(12) not null,
+	nom varchar (20) not null,
+	data_naix date not null,
+	constraint pk_dni PRIMARY key (dni),
+	constraint ch_numss unique (numss)
+);
+
+create table DATA (
+	data date not null,
+	constraint pk_data PRIMARY key (data)
+);
+
+create table curs(
+	codi char (5) not null,
+	nom varchar(20)not null,
+	hores smallint not null,
+	dificultat varchar (7) not null,
+	constraint pk_codi PRIMARY key (codi),
+	constraint ch_hores check (hores >= 0),
+	constraint ch_dificultat check (dificultat = 'facil' or dificultat= 'dificil' or dificultat='mig')
+);
+
+create table cursar (
+	dni char(9)not null,
+	data date not null,
+	codi char (5)not null,
+	nota tinyint not null,
+	constraint ch_nota check (nota >= 0 and nota <=10),
+	constraint fk_dni FOREIGN key (dni) references alumne (dni) on delete restrict,
+	constraint fk_data FOREIGN key (data) references data (data) on delete cascade on update cascade,
+	constraint fk_codi FOREIGN key (codi) references curs (codi) on delete cascade,
+	constraint pk_tres PRIMARY key (dni, data, codi)
+);
