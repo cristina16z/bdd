@@ -84,7 +84,7 @@ alter table empleats modify cognom_empl varchar (50);
 
 
 /* 7. Modifica la taula empleats de forma que el sou tingui un valor per defecte de 1100,50 €.                                  */
-alter table empleats modify sou float (6,2) default '1100.50' not null;
+alter table empleats modify sou float (6,2) default 1100.50 not null;
 
 
 /* 8. Modifica la taula projectes i elimina el camp retencio                                                                     */

@@ -105,7 +105,7 @@ create table t3(
 
 	dni char (9) PRIMARY key,								"con la Primary key ya se aplica automáticamente el not NULL"
 	nom varchar(20) not NULL,					
-	email year (4) not NULL UNIQUE,					
+	email year (4) unique not NULL,					
 	sou float not NULL check (sou >= 400)	
 	
 );
